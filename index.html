@@ -1,0 +1,74 @@
+<script>
+  window.addEventListener("load", async function() {
+    const DELAY = 40;
+
+    async function escribirLinea(linea) {
+      function escribirCaracter(resolve) {
+        var p = document.getElementById("code");
+        document.getElementById("code").innerHTML += linea[posicionEnLinea];
+        posicionEnLinea++;
+        posicionEnStyle++;
+        document.getElementById("style").innerHTML = style.substring(0, posicionEnStyle);
+        if (linea.length <= posicionEnLinea) {
+          p.innerHTML += "<br>";
+          posicionEnStyle++;
+          resolve();
+          return;
+        }
+        setTimeout(() => arguments.callee(resolve), DELAY);
+      }
+
+      var posicionEnLinea = 0;
+      return new Promise(escribirCaracter);
+    }
+
+    var style =
+      "body {\n" +
+      "  color: #7B5165;\n" +
+      "  background-color: #FFDFC5;\n" +
+      "}\n" +
+      ".azul, .azul:before, .azul:after {\n" +
+      "  background-color: blue;\n" +
+      "}\n" +
+      ".violeta, .violeta:before, .violeta:after {\n" +
+      "  background-color: purple;\n" +
+      "}\n" +
+      ".corazon {\n" +
+      "  display: inline-block;\n" +
+      "  height: 30px;\n" +
+      "  transform: rotate(-45deg);\n" +
+      "  margin: 20px;\n" +
+      "  width: 30px;\n" +
+      "  position: relative;\n" +
+      "  animation: latir 1s ease infinite; /*SI, INFINITE <3*/\n" +
+      "}\n" +
+      ".corazon:before, .corazon:after {\n" +
+      "  content: \"\";\n" +
+      "  position: absolute;\n" +
+      "  height: 30px;\n" +
+      "  width: 30px;\n" +
+      "  border-radius: 50%;\n" +
+      "}\n" +
+      ".corazon:before {\n" +
+      "  top: -15px;\n" +
+      "  left: 0;\n" +
+      "}\n" +
+      ".corazon:after {\n" +
+      "  left: 15px;\n" +
+      "  top: 0;\n" +
+      "}\n" +
+      "@keyframes latir {\n" +
+      "  0% { transform: rotate(-45deg) scale(1); }\n" +
+      "  50% { transform: rotate(-45deg) scale(1.3); }\n" +
+      "  100% { transform: rotate(-45deg) scale(1); }\n" +
+      "}";
+    var posicionEnStyle = 0;
+
+    for (var linea of style.split("\n")) await escribirLinea(linea);
+  });
+</script>
+
+<style id="style"></style>
+<pre id="code"></pre>
+<div class="corazon azul"></div>
+<div class="corazon violeta"></div>
